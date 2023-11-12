@@ -5,9 +5,11 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 from pkl import LoadSaver
-from usage_error import RedirectUsageError, UsageError
+from usage_error import RedirectUsageError, UsageError, IgnoreEdit
 
 
+@RedirectUsageError()
+@IgnoreEdit()
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     command, *args = update.message.text.split()
     me = command[len('/help'):]
@@ -22,6 +24,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @RedirectUsageError()
+@IgnoreEdit()
 async def new_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message is None:
         if update.edited_message is not None:
@@ -51,6 +54,7 @@ async def new_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @RedirectUsageError()
+@IgnoreEdit()
 async def delete_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     command, *args = update.message.text.split()
 
@@ -76,6 +80,8 @@ async def delete_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_markdown('\n'.join(log))
 
 
+@RedirectUsageError()
+@IgnoreEdit()
 async def list_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with LoadSaver(update.message.chat.id) as group:
         tagnames = list(group.keys())
