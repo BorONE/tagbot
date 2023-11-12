@@ -9,12 +9,15 @@ from usage_error import RedirectUsageError, UsageError
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    command, *args = update.message.text.split()
+    me = command[len('/help'):]
     await update.message.reply_markdown('\n'.join([
-        '/help -- show this message'
-        '/new @tagname @tagname @user1 @user2 @user3 -- to create @tagname with users @user1 @user2 @user3'
-        '/delete @tagname -- to delete @tagname'
-        '/list -- list all tagnames'
-        'Tag group of users with created tagnames '
+        f'/help{me} – show this message',
+        f'/new{me} – to create tagname with users',
+        f'/delete{me} – to delete tagname',
+        f'/list{me} – list all tagnames',
+        '',
+        'Tag groups of users with created tagnames ',
     ]))
 
 
