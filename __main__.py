@@ -105,12 +105,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print({
-        'text':         update.message.text,
-        'entities':     update.message.entities,
-        'error':        context.error,
-        'error_type':   type(context.error),
-    })
+    log = {}
+    log['error'] = context.error
+    log['error_type'] = type(context.error)
+    if update.message is not None:
+        log['text'] = update.message.text
+        log['entities'] = update.message.entities
+    else:
+        log['has_message'] = False
+    print(log)
 
 
 def read_token(filename='token.txt') -> str:
